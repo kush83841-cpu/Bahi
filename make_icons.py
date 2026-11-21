@@ -1,6 +1,5 @@
-
 """
-Generate ShopLedger PWA icons (icon-192.png, icon-512.png) into static/.
+Generate Bahi PWA icons (icon-192.png, icon-512.png) into static/.
 Pure standard library - no Pillow needed. Run once:  python make_icons.py
 Draws a ledger book (violet-pink gradient cover, white pages) on dark navy.
 """

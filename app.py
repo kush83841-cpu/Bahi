@@ -1,5 +1,5 @@
 """
-ShopLedger - shop record book (bahi-khata)
+Bahi - shop record book (bahi-khata)
 No login - opens straight to the dashboard.
 Two mirror-image sides:
   CUSTOMERS: people I sell to - their sales, payments, dues to me
@@ -11,13 +11,19 @@ import sqlite3
 from datetime import date
 
 from flask import (
-    Flask, flash, g, redirect, render_template, request, url_for,
+    Flask,
+    flash,
+    g,
+    redirect,
+    render_template,
+    request,
+    url_for,
 )
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-only-change-me")
 
-DATABASE = os.path.join(app.instance_path, "shopledger.db")
+DATABASE = os.path.join(app.instance_path, "Bahi.db")
 
 
 @app.route("/sw.js")
@@ -27,6 +33,7 @@ def service_worker():
 
 
 # ---------- database ----------
+
 
 def get_db():
     if "db" not in g:
@@ -46,18 +53,15 @@ def close_db(exception):
 
 def init_db():
     db = get_db()
-    db.execute(
-        """
+    db.execute("""
         CREATE TABLE IF NOT EXISTS customers (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             phone TEXT NOT NULL DEFAULT '',
             address TEXT NOT NULL DEFAULT ''
         )
-        """
-    )
-    db.execute(
-        """
+        """)
+    db.execute("""
         CREATE TABLE IF NOT EXISTS sales (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             customer_id INTEGER NOT NULL,
@@ -68,20 +72,16 @@ def init_db():
             date TEXT NOT NULL,
             FOREIGN KEY (customer_id) REFERENCES customers (id)
         )
-        """
-    )
-    db.execute(
-        """
+        """)
+    db.execute("""
         CREATE TABLE IF NOT EXISTS purchases (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             phone TEXT NOT NULL DEFAULT '',
             address TEXT NOT NULL DEFAULT ''
         )
-        """
-    )
-    db.execute(
-        """
+        """)
+    db.execute("""
         CREATE TABLE IF NOT EXISTS purchase_records (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             purchase_id INTEGER NOT NULL,
@@ -92,12 +92,12 @@ def init_db():
             date TEXT NOT NULL,
             FOREIGN KEY (purchase_id) REFERENCES purchases (id)
         )
-        """
-    )
+        """)
     db.commit()
 
 
 # ---------- dashboard ----------
+
 
 @app.route("/")
 def index():
@@ -122,30 +122,24 @@ def index():
         "SELECT COALESCE(SUM(amount - paid), 0) FROM purchase_records"
     ).fetchone()[0]
 
-    debtors = db.execute(
-        """
+    debtors = db.execute("""
         SELECT c.id, c.name, COALESCE(SUM(s.amount - s.paid), 0) AS due
         FROM customers c JOIN sales s ON s.customer_id = c.id
         GROUP BY c.id HAVING due > 0
         ORDER BY due DESC LIMIT 5
-        """
-    ).fetchall()
+        """).fetchall()
 
-    recent_sales = db.execute(
-        """
+    recent_sales = db.execute("""
         SELECT s.*, c.name AS customer_name FROM sales s
         JOIN customers c ON c.id = s.customer_id
         ORDER BY s.date DESC, s.id DESC LIMIT 5
-        """
-    ).fetchall()
+        """).fetchall()
 
-    recent_purch = db.execute(
-        """
+    recent_purch = db.execute("""
         SELECT r.*, p.name AS purchase_name FROM purchase_records r
         JOIN purchases p ON p.id = r.purchase_id
         ORDER BY r.date DESC, r.id DESC LIMIT 5
-        """
-    ).fetchall()
+        """).fetchall()
 
     return render_template(
         "index.html",
@@ -162,6 +156,7 @@ def index():
 
 
 # ---------- customers ----------
+
 
 @app.route("/customers")
 def customers():
@@ -233,6 +228,7 @@ def delete_customer(customer_id):
 
 # ---------- sales ----------
 
+
 @app.route("/sales/add", methods=["POST"])
 def add_sale():
     customer_id = request.form.get("customer_id")
@@ -295,6 +291,7 @@ def delete_sale(sale_id):
 
 
 # ---------- purchases (people I buy from) ----------
+
 
 @app.route("/purchases")
 def purchases():
@@ -365,6 +362,7 @@ def delete_purchase(purchase_id):
 
 
 # ---------- purchase records (each buying entry) ----------
+
 
 @app.route("/purchase-records/add", methods=["POST"])
 def add_purchase_record():

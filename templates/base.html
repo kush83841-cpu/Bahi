@@ -4,25 +4,26 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}ShopLedger{% endblock %} · ShopLedger</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}" />
-    <meta name="theme-color" content="#8b5cf6" />
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icon-192.png') }}" />
+    <title>{% block title %}Bahi{% endblock %} · Bahi
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+        <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}" />
+        <meta name="theme-color" content="#8b5cf6" />
+        <link rel="apple-touch-icon" href="{{ url_for('static', filename='icon-192.png') }}" />
 </head>
 
 <body>
     <div class="bg-glow"></div>
 
     <nav class="navbar">
-        <a href="{{ url_for('index') }}" class="logo">📒 ShopLedger</a>
-        <div class="nav-links">
-            <a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">Dashboard</a>
-            <a href="{{ url_for('customers') }}"
-                class="{% if request.endpoint in ['customers', 'customer_detail'] %}active{% endif %}">Customers</a>
-            <a href="{{ url_for('purchases') }}"
-                class="{% if request.endpoint in ['purchases', 'purchase_detail'] %}active{% endif %}">Purchases</a>
-        </div>
+        <a href="{{ url_for('index') }}" class="logo">📒 Bahi
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}"
+                    class="{% if request.endpoint == 'index' %}active{% endif %}">Dashboard</a>
+                <a href="{{ url_for('customers') }}"
+                    class="{% if request.endpoint in ['customers', 'customer_detail'] %}active{% endif %}">Customers</a>
+                <a href="{{ url_for('purchases') }}"
+                    class="{% if request.endpoint in ['purchases', 'purchase_detail'] %}active{% endif %}">Purchases</a>
+            </div>
     </nav>
 
     <main class="container">

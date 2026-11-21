@@ -1,5 +1,5 @@
-// ShopLedger service worker - network-first, cache fallback for offline
-const CACHE = "shopledger-v1";
+// Bahi service worker - network-first, cache fallback for offline
+const CACHE = "Bahi
 const CORE = [
     "/",
     "/static/style.css",
